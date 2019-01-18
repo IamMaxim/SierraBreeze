@@ -39,7 +39,7 @@ namespace SierraBreeze {
 
         //* titlebar metrics, in units of small spacing
         TitleBar_TopMargin = 1,
-        TitleBar_BottomMargin = 0,
+        TitleBar_BottomMargin = 1,
         TitleBar_SideMargin = 4,
         TitleBar_ButtonSpacing = 4,
 
