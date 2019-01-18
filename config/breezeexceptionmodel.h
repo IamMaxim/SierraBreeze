@@ -29,17 +29,17 @@
 #include "breezesettings.h"
 #include "breeze.h"
 
-namespace SierraBreeze
-{
+namespace SierraBreeze {
 
     //* qlistview for object counters
-    class ExceptionModel: public ListModel<InternalSettingsPtr>
-    {
+    class ExceptionModel : public ListModel<InternalSettingsPtr> {
 
-        public:
+    public:
 
         //* number of columns
-        enum { nColumns = 3 };
+        enum {
+            nColumns = 3
+        };
 
         //* column type enumeration
         enum ColumnType {
@@ -59,21 +59,19 @@ namespace SierraBreeze
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
         //* number of columns for a given index
-        int columnCount(const QModelIndex& ) const override
-        { return nColumns; }
+        int columnCount(const QModelIndex &) const override { return nColumns; }
 
         //@}
 
-        protected:
+    protected:
 
         //* sort
-        void privateSort( int, Qt::SortOrder ) override
-        {}
+        void privateSort(int, Qt::SortOrder) override {}
 
-        private:
+    private:
 
         //* column titles
-        static const QString m_columnTitles[ nColumns ];
+        static const QString m_columnTitles[nColumns];
 
     };
 

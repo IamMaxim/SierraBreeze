@@ -29,84 +29,78 @@
 #include "breezeexceptionmodel.h"
 
 //* QDialog used to commit selected files
-namespace SierraBreeze
-{
+namespace SierraBreeze {
 
-    class ExceptionListWidget: public QWidget
-    {
+    class ExceptionListWidget : public QWidget {
 
         //* Qt meta object
-        Q_OBJECT
+    Q_OBJECT
 
-        public:
+    public:
 
         //* constructor
-        explicit ExceptionListWidget( QWidget* = 0 );
+        explicit ExceptionListWidget(QWidget * = 0);
 
         //* set exceptions
-        void setExceptions( const InternalSettingsList& );
+        void setExceptions(const InternalSettingsList &);
 
         //* get exceptions
-        InternalSettingsList exceptions( void );
+        InternalSettingsList exceptions(void);
 
         //* true if changed
-        virtual bool isChanged( void ) const
-        { return m_changed; }
+        virtual bool isChanged(void) const { return m_changed; }
 
-        Q_SIGNALS:
+    Q_SIGNALS:
 
         //* emitted when changed
-        void changed( bool );
+        void changed(bool);
 
-        protected:
-
-        //* model
-        const ExceptionModel& model() const
-        { return m_model; }
+    protected:
 
         //* model
-        ExceptionModel& model()
-        { return m_model; }
+        const ExceptionModel &model() const { return m_model; }
 
-        protected Q_SLOTS:
+        //* model
+        ExceptionModel &model() { return m_model; }
+
+    protected Q_SLOTS:
 
         //* update button states
-        virtual void updateButtons( void );
+        virtual void updateButtons(void);
 
         //* add
-        virtual void add( void );
+        virtual void add(void);
 
         //* edit
-        virtual void edit( void );
+        virtual void edit(void);
 
         //* remove
-        virtual void remove( void );
+        virtual void remove(void);
 
         //* toggle
-        virtual void toggle( const QModelIndex& );
+        virtual void toggle(const QModelIndex &);
 
         //* move up
-        virtual void up( void );
+        virtual void up(void);
 
         //* move down
-        virtual void down( void );
+        virtual void down(void);
 
-        protected:
+    protected:
 
         //* resize columns
-        void resizeColumns( void ) const;
+        void resizeColumns(void) const;
 
         //* check exception
-        bool checkException( InternalSettingsPtr );
+        bool checkException(InternalSettingsPtr);
 
         //* set changed state
-        virtual void setChanged( bool value )
-        {
+        virtual void setChanged(bool value) {
             m_changed = value;
-            emit changed( value );
+            emit changed(value);
         }
 
-        private:
+    private:
 
         //* model
         ExceptionModel m_model;

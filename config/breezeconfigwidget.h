@@ -36,43 +36,41 @@
 #include <QWidget>
 #include <QSharedPointer>
 
-namespace SierraBreeze
-{
+namespace SierraBreeze {
 
     //_____________________________________________
-    class ConfigWidget: public KCModule
-    {
+    class ConfigWidget : public KCModule {
 
-        Q_OBJECT
+    Q_OBJECT
 
-        public:
+    public:
 
         //* constructor
-        explicit ConfigWidget( QWidget*, const QVariantList& );
+        explicit ConfigWidget(QWidget *, const QVariantList &);
 
         //* destructor
-        virtual ~ConfigWidget( void ) = default;
+        virtual ~ConfigWidget(void) = default;
 
         //* default
         void defaults() override;
 
         //* load configuration
-        void load( void ) override;
+        void load(void) override;
 
         //* save configuration
-        void save( void ) override;
+        void save(void) override;
 
-        protected Q_SLOTS:
+    protected Q_SLOTS:
 
         //* update changed state
         virtual void updateChanged();
 
-        protected:
+    protected:
 
         //* set changed state
-        void setChanged( bool );
+        void setChanged(bool);
 
-        private:
+    private:
 
         //* ui
         Ui_BreezeConfigurationUI m_ui;

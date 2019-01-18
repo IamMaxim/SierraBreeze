@@ -29,17 +29,19 @@
 #include <QImage>
 #include <QPropertyAnimation>
 
-namespace SierraBreeze
-{
+namespace SierraBreeze {
 
-    class Button : public KDecoration2::DecorationButton
-    {
-        Q_OBJECT
+    class Button : public KDecoration2::DecorationButton {
+    Q_OBJECT
 
         //* declare active state opacity
-        Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
+        Q_PROPERTY(qreal opacity
+                           READ
+                           opacity
+                           WRITE
+                           setOpacity)
 
-        public:
+    public:
 
         //* constructor
         explicit Button(QObject *parent, const QVariantList &args);
@@ -48,14 +50,14 @@ namespace SierraBreeze
         virtual ~Button() = default;
 
         //* button creation
-        static Button *create(KDecoration2::DecorationButtonType type, KDecoration2::Decoration *decoration, QObject *parent);
+        static Button *
+        create(KDecoration2::DecorationButtonType type, KDecoration2::Decoration *decoration, QObject *parent);
 
         //* render
         virtual void paint(QPainter *painter, const QRect &repaintRegion) override;
 
         //* flag
-        enum Flag
-        {
+        enum Flag {
             FlagNone,
             FlagStandalone,
             FlagFirstInList,
@@ -63,43 +65,36 @@ namespace SierraBreeze
         };
 
         //* flag
-        void setFlag( Flag value )
-        { m_flag = value; }
+        void setFlag(Flag value) { m_flag = value; }
 
         //* standalone buttons
         bool isStandAlone() const { return m_flag == FlagStandalone; }
 
         //* offset
-        void setOffset( const QPointF& value )
-        { m_offset = value; }
+        void setOffset(const QPointF &value) { m_offset = value; }
 
         //* horizontal offset, for rendering
-        void setHorizontalOffset( qreal value )
-        { m_offset.setX( value ); }
+        void setHorizontalOffset(qreal value) { m_offset.setX(value); }
 
         //* vertical offset, for rendering
-        void setVerticalOffset( qreal value )
-        { m_offset.setY( value ); }
+        void setVerticalOffset(qreal value) { m_offset.setY(value); }
 
         //* set icon size
-        void setIconSize( const QSize& value )
-        { m_iconSize = value; }
+        void setIconSize(const QSize &value) { m_iconSize = value; }
 
         //*@name active state change animation
         //@{
-        void setOpacity( qreal value )
-        {
-            if( m_opacity == value ) return;
+        void setOpacity(qreal value) {
+            if (m_opacity == value) return;
             m_opacity = value;
             update();
         }
 
-        qreal opacity( void ) const
-        { return m_opacity; }
+        qreal opacity(void) const { return m_opacity; }
 
         //@}
 
-        private Q_SLOTS:
+    private Q_SLOTS:
 
         //* apply configuration changes
         void reconfigure();
@@ -107,18 +102,19 @@ namespace SierraBreeze
         //* animation state
         void updateAnimationState(bool);
 
-        private:
+    private:
 
         //* private constructor
         explicit Button(KDecoration2::DecorationButtonType type, Decoration *decoration, QObject *parent = nullptr);
 
         //* draw button icon
-        void drawIcon( QPainter *) const;
+        void drawIcon(QPainter *) const;
 
         //*@name colors
         //@{
-        QColor foregroundColor( void ) const;
-        QColor backgroundColor( void ) const;
+        QColor foregroundColor(void) const;
+
+        QColor backgroundColor(void) const;
         //@}
 
         Flag m_flag = FlagNone;

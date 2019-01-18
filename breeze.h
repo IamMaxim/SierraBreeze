@@ -26,36 +26,31 @@
 #include <QSharedPointer>
 #include <QList>
 
-namespace SierraBreeze
-{
+namespace SierraBreeze {
     //* convenience typedefs
     using InternalSettingsPtr = QSharedPointer<InternalSettings>;
     using InternalSettingsList = QList<InternalSettingsPtr>;
     using InternalSettingsListIterator = QListIterator<InternalSettingsPtr>;
 
     //* metrics
-    enum Metrics
-    {
-
+    enum Metrics {
         //* corner radius (pixels)
         Frame_FrameRadius = 4,
 
         //* titlebar metrics, in units of small spacing
-        TitleBar_TopMargin = 2,
-        TitleBar_BottomMargin = 2,
+        TitleBar_TopMargin = 1,
+        TitleBar_BottomMargin = 0,
         TitleBar_SideMargin = 4,
         TitleBar_ButtonSpacing = 4,
 
         // shadow dimensions (pixels)
         Shadow_Overlap = 3,
-
     };
 
     //* exception
-    enum ExceptionMask
-    {
+    enum ExceptionMask {
         None = 0,
-        BorderSize = 1<<4
+        BorderSize = 1 << 4
     };
 }
 
