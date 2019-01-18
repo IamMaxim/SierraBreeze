@@ -49,7 +49,7 @@ namespace SierraBreeze {
         //* declare active state opacity
         Q_PROPERTY(qreal opacity
                            READ
-                           opacity
+                                   opacity
                            WRITE
                            setOpacity)
 
@@ -144,6 +144,8 @@ namespace SierraBreeze {
 
         bool isKonsoleWindow(KDecoration2::DecoratedClient *dc) const;
 
+        QColor *getColorForWindow(KDecoration2::DecoratedClient *dc) const;
+
         void createShadow();
 
         //*@name border size
@@ -183,6 +185,9 @@ namespace SierraBreeze {
         QColor m_KonsoleTitleBarColor;
         QColor m_KonsoleTitleBarTextColorActive;
         QColor m_KonsoleTitleBarTextColorInactive;
+
+        QColor m_TelegramTitleBarColor = QColor(23, 33, 43);
+
         bool m_KonsoleTitleBarColorValid;
 
         //TODO Review this

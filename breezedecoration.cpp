@@ -103,12 +103,12 @@ namespace SierraBreeze {
 
     //________________________________________________________________
     QColor Decoration::titleBarColor() const {
-
         auto c = client().data();
+        QColor *color = getColorForWindow(c);
 
-        if (isKonsoleWindow(c)) {
-            return m_KonsoleTitleBarColor;
-        }
+        // if color override is found, return it
+        if (color != nullptr)
+            return *color;
 
         if (hideTitleBar())
             return c->color(ColorGroup::Inactive, ColorRole::TitleBar);
@@ -375,6 +375,21 @@ namespace SierraBreeze {
                info.windowRole().startsWith("MainWindow");
     }
 
+    QColor *Decoration::getColorForWindow(KDecoration2::DecoratedClient *dc) const {
+        if (isKonsoleWindow(dc))
+            return (QColor *) &m_KonsoleTitleBarColor;
+
+        KWindowInfo info(dc->windowId(), 0, NET::WM2WindowClass);
+
+        if (info.valid()) {
+            if (info.windowClassClass() == QByteArray("TelegramDesktop")) {
+                return (QColor *) &m_TelegramTitleBarColor;
+            }
+        }
+
+        return nullptr;
+    }
+
     //________________________________________________________________
     void Decoration::reconfigure() {
 
@@ -532,64 +547,30 @@ namespace SierraBreeze {
         auto c = client().data();
         auto s = settings();
 
-        // paint background
-        if (!c->isShaded()) {
-            painter->fillRect(rect(), Qt::transparent);
-            painter->save();
-            painter->setRenderHint(QPainter::Antialiasing);
-            painter->setPen(Qt::NoPen);
-
-            if (isKonsoleWindow(c)) {
-                painter->setBrush(m_KonsoleTitleBarColor);
-            } else {
-                painter->setBrush(
-                        c->color(c->isActive() ? ColorGroup::Active : ColorGroup::Inactive, ColorRole::Frame));
-            }
-
-            // clip away the top part
-            if (!hideTitleBar())
-                painter->setClipRect(0, borderTop(), size().width(), size().height() - borderTop(), Qt::IntersectClip);
-
-            if (s->isAlphaChannelSupported())
-                painter->drawRoundedRect(rect(), Metrics::Frame_FrameRadius, Metrics::Frame_FrameRadius);
-            else painter->drawRect(rect());
-
-            painter->restore();
-        }
-
-        if (!hideTitleBar()) paintTitleBar(painter, repaintRegion);
-
-        if (hasBorders() && !s->isAlphaChannelSupported()) {
-            painter->save();
-            painter->setRenderHint(QPainter::Antialiasing, false);
-            painter->setBrush(Qt::NoBrush);
-            painter->setPen(c->isActive() ?
-                            c->color(ColorGroup::Active, ColorRole::TitleBar) :
-                            c->color(ColorGroup::Inactive, ColorRole::Foreground));
-
-            painter->drawRect(rect().adjusted(0, 0, -1, -1));
-            painter->restore();
-        }
-
+        if (!hideTitleBar())
+            paintTitleBar(painter, repaintRegion);
     }
 
     //________________________________________________________________
     void Decoration::paintTitleBar(QPainter *painter, const QRect &repaintRegion) {
         const auto c = client().data();
         // TODO Review this. Here the window color is appended in matchedTitleBarColor var
-        const QColor matchedTitleBarColor(c->palette().color(QPalette::Window));
+        QColor matchedTitleBarColor(c->palette().color(QPalette::Window));
         const QRect titleRect(QPoint(0, 0), QSize(size().width(), borderTop()));
 
         if (!titleRect.intersects(repaintRegion)) return;
+
+        // get overridden color for current title bar, if any
+        QColor *color = getColorForWindow(c);
 
         painter->save();
         painter->setPen(Qt::NoPen);
 
         // render a linear gradient on title area
         if (c->isActive() && m_internalSettings->drawBackgroundGradient() && !isKonsoleWindow(c)) {
-
             // TODO Review this. Initialize titleBarColor based on user's choise.
-            const QColor titleBarColor = (matchColorForTitleBar() ? matchedTitleBarColor : this->titleBarColor());
+            const QColor titleBarColor = color != nullptr ? *color : (matchColorForTitleBar() ? matchedTitleBarColor
+                                                                                              : this->titleBarColor());
             QLinearGradient gradient(0, 0, 0, titleRect.height());
             gradient.setColorAt(0.0, titleBarColor.lighter(120));
             gradient.setColorAt(0.8, titleBarColor);
@@ -600,7 +581,8 @@ namespace SierraBreeze {
             // TODO Review this. Initialize titleBarColor based on user's choise.
             // I needed another else if because the window might not be active or has drawBackgroundGradient but
             // I still need to take care the konsole case.
-            const QColor titleBarColor = (matchColorForTitleBar() ? matchedTitleBarColor : this->titleBarColor());
+            const QColor titleBarColor = color != nullptr ? *color : (matchColorForTitleBar() ? matchedTitleBarColor
+                                                                                              : this->titleBarColor());
             painter->setBrush(titleBarColor);
 
         } else {
@@ -719,11 +701,8 @@ namespace SierraBreeze {
                     else return qMakePair(fullRect, Qt::AlignCenter);
 
                 }
-
             }
-
         }
-
     }
 
     //________________________________________________________________
